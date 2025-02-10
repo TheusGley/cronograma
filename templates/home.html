@@ -1,0 +1,69 @@
+
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static "style.css" %}"> 
+
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<!-- Popper JS -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+
+<!-- Bootstrap JS Bundle -->
+<script src="https://unpkg.com/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Calistoga&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Calistoga&family=Protest+Guerrilla&display=swap" rel="stylesheet">
+
+<body>
+<main class="container sm-md">
+
+{% comment %} Fullcalendar.js {% endcomment %}
+  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+  {% comment %} Locales.js {% endcomment %}
+  <script src="{%static 'js/core/locales/pt-br.global.js'%}"></script>
+    <!-- Moment.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<div class="col mt-2">
+    <div class="container">
+        <div id='calendar'></div>
+    </div>
+    
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            locale:'pt-br',
+            selectable: true,
+            dateClick: function(info) {
+               var day = moment(info.dateStr).format('YYYY-MM-DD');
+               console.log(day);
+            },
+            events: [
+             {% for a in eventos %}
+            {
+                title: "{{a.cidade}} - {{a.servidor}}",
+                start: "{{a.data|date:"Y-m-d"}}",
+                color:"green"
+            },
+            {% endfor %}
+            
+        ],
+        headerToolbar: {  // Personalize a barra superior
+            left: '',      // Remover a área esquerda (seta de navegação anterior)
+            center: 'title', // Exibir o nome do mês no centro
+            right: ''      // Remover a área direita (seta de navegação seguinte)
+        },
+        });
+        calendar.render();
+    });
+</script>
